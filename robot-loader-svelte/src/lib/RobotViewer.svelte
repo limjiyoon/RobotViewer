@@ -31,6 +31,7 @@
     const ground = new Mesh(new THREE.PlaneGeometry(), new THREE.ShadowMaterial({ opacity: 0.75 }));
     ground.rotation.x = -Math.PI / 2;
     ground.scale.setScalar(30);
+    ground.receiveShadow = true;
     scene.add(ground);
 
     camera.position.y = 20;
@@ -45,9 +46,28 @@
         '/src/assets/T12/urdf/T12.urdf',
         (robot) => {
             robot.rotation.x = -Math.PI / 2;
+            robot.traverse(child => {
+                child.castShadow = true;
+            });
+            for (let i = 1; i <= 6; i++) {
+                robot.joints[`HP${ i }`].setJointValue(MathUtils.degToRad(30));
+                robot.joints[`KP${ i }`].setJointValue(MathUtils.degToRad(120));
+                robot.joints[`AP${ i }`].setJointValue(MathUtils.degToRad(-60));
+            }
+            robot.updateMatrixWorld(true);
             scene.add(robot);
         }
     )
+
+    const onResize = () => {
+
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+
+    };
 
     const render = () => {
         requestAnimationFrame(render);
@@ -55,5 +75,7 @@
     }
 
     render();
+    onResize();
+    window.addEventListener('resize', onResize);
 </script>
 
