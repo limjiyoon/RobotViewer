@@ -1,14 +1,24 @@
 <script lang="ts">
     import * as THREE from 'three';
-    import {LoadingManager, MathUtils, Mesh} from 'three';
+    import {DirectionalLight, LoadingManager, MathUtils, Mesh, WebGLRenderer} from 'three';
     import URDFLoader from 'urdf-loader';
     import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
-    const renderer = new THREE.WebGLRenderer();
-    renderer.setSize( window.innerWidth, window.innerHeight );
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    // renderer.setSize( window.innerWidth, window.innerHeight );
+    const renderer = new WebGLRenderer({ antialias: true })!!;
+    // renderer.outputEncoding = THREE.sRGBEncoding;
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    document.body.appendChild(renderer.domElement);
     document.body.appendChild( renderer.domElement );
+
+    const directionalLight = new DirectionalLight(0xffffff, 1.0);
+    directionalLight.castShadow = true;
+    directionalLight.shadow.mapSize.setScalar(1024);
+    directionalLight.position.set(5, 30, 5);
+    scene.add(directionalLight);
 
     const ambientLight = new THREE.AmbientLight( 0xffffff ); // soft white light
     scene.add( ambientLight );
@@ -18,10 +28,9 @@
     const gridHelper = new THREE.GridHelper( size, divisions );
     scene.add(gridHelper)
 
-    const ground = new Mesh(new THREE.PlaneGeometry(), new THREE.ShadowMaterial({ opacity: 0.25 }));
+    const ground = new Mesh(new THREE.PlaneGeometry(), new THREE.ShadowMaterial({ opacity: 0.75 }));
     ground.rotation.x = -Math.PI / 2;
     ground.scale.setScalar(30);
-    ground.receiveShadow = true;
     scene.add(ground);
 
     camera.position.y = 20;
@@ -29,13 +38,6 @@
     controls.minDistance = 4;
     controls.target.y = 1;
     controls.update();
-
-    function animate() {
-        requestAnimationFrame(animate);
-        controls.update();
-        renderer.render(scene, camera);
-    }
-    animate();
 
     const manager = new LoadingManager();
     const loader = new URDFLoader( manager );
@@ -46,4 +48,12 @@
             scene.add(robot);
         }
     )
+
+    const render = () => {
+        requestAnimationFrame(render);
+        renderer.render(scene, camera);
+    }
+
+    render();
 </script>
+
