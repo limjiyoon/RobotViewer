@@ -6,9 +6,7 @@
 
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    // renderer.setSize( window.innerWidth, window.innerHeight );
     const renderer = new WebGLRenderer({ antialias: true })!!;
-    // renderer.outputEncoding = THREE.sRGBEncoding;
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     document.body.appendChild(renderer.domElement);
@@ -28,7 +26,7 @@
     const gridHelper = new THREE.GridHelper( size, divisions );
     scene.add(gridHelper)
 
-    const ground = new Mesh(new THREE.PlaneGeometry(), new THREE.ShadowMaterial({ opacity: 0.75 }));
+    const ground = new Mesh(new THREE.PlaneGeometry(), new THREE.ShadowMaterial({ opacity: 0.25 }));
     ground.rotation.x = -Math.PI / 2;
     ground.scale.setScalar(30);
     ground.receiveShadow = true;
@@ -55,6 +53,10 @@
                 robot.joints[`AP${ i }`].setJointValue(MathUtils.degToRad(-60));
             }
             robot.updateMatrixWorld(true);
+
+            const box = new THREE.Box3()
+            const newBox = box.setFromObject(robot);
+            // robot.position.y -= newBox.min.y;
             scene.add(robot);
         }
     )
