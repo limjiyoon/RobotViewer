@@ -2,7 +2,8 @@
     import * as THREE from 'three';
     import {DirectionalLight, Mesh, WebGLRenderer} from 'three';
     import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-    import Robot from "./RobotVisual.svelte";
+    import RobotVisual from "./RobotVisual.svelte";
+    import RadianButton from "./RadianButton.svelte";
 
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -58,5 +59,8 @@
     window.addEventListener('resize', onResize);
 </script>
 
-
-<Robot scene={scene} robotName="T12"/>
+<div id="controls">
+    <RadianButton />
+    <div id="do-animate" class="toggle checked">Animate Joints</div>
+</div>
+<RobotVisual scene={scene} robotName="T12"/>
