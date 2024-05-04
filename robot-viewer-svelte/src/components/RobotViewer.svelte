@@ -1,9 +1,10 @@
 <script lang="ts">
     import * as THREE from 'three';
-    import {DirectionalLight, Mesh, WebGLRenderer} from 'three';
+    import {DirectionalLight, LoaderUtils, LoadingManager, Mesh, WebGLRenderer} from 'three';
     import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-    import RobotVisual from "./RobotVisual.svelte";
     import RadianButton from "./RadianButton.svelte";
+    import URDFLoader, {type URDFRobot} from "urdf-loader";
+    import DrawRobot from "./DrawRobot.svelte";
 
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -57,10 +58,28 @@
     render();
     onResize();
     window.addEventListener('resize', onResize);
+
+    function getRobot(robotName: string): Promise<URDFRobot> {
+        const manager = new LoadingManager();
+        const loader = new URDFLoader( manager );
+        const getRobotUrdfURL = `http://localhost:8080/urdfs/${robotName}.urdf`;
+        loader.workingPath = LoaderUtils.extractUrlBase( getRobotUrdfURL );
+
+        return fetch(getRobotUrdfURL)
+            .then(res => res.text())
+            .then(content => loader.parse(content));
+    }
+
+    const robotPromise = getRobot("T12");
 </script>
 
 <div id="controls">
     <RadianButton />
     <div id="do-animate" class="toggle checked">Animate Joints</div>
 </div>
-<RobotVisual scene={scene} robotName="T12"/>
+<!--<RobotVisual scene={scene} robotName="T12"/>-->
+{#await robotPromise}
+    <p>Waiting...</p>
+{:then robot}
+    <DrawRobot robot={robot} scene={scene}/>
+{/await}

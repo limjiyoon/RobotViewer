@@ -1,5 +1,5 @@
 <script lang="ts">
-  import RobotViewer from './lib/RobotViewer.svelte'
+  import RobotViewer from './components/RobotViewer.svelte'
 </script>
 
 <main>
