@@ -1,8 +1,8 @@
 <script lang="ts">
     import * as THREE from 'three';
-    import {DirectionalLight, LoadingManager, MathUtils, Mesh, WebGLRenderer} from 'three';
-    import URDFLoader from 'urdf-loader';
+    import {DirectionalLight, Mesh, WebGLRenderer} from 'three';
     import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+    import Robot from "./RobotVisual.svelte";
 
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -38,25 +38,6 @@
     controls.target.y = 1;
     controls.update();
 
-    const manager = new LoadingManager();
-    const loader = new URDFLoader( manager );
-    loader.load(
-        'http://localhost:8080/urdfs/T12.urdf',
-        (robot) => {
-            robot.rotation.x = -Math.PI / 2;
-            robot.traverse(child => {
-                child.castShadow = true;
-            });
-            for (let i = 1; i <= 6; i++) {
-                robot.joints[`HP${ i }`].setJointValue(MathUtils.degToRad(30));
-                robot.joints[`KP${ i }`].setJointValue(MathUtils.degToRad(120));
-                robot.joints[`AP${ i }`].setJointValue(MathUtils.degToRad(-60));
-            }
-            robot.updateMatrixWorld(true);
-            scene.add(robot);
-        }
-    )
-
     const onResize = () => {
 
         renderer.setSize(window.innerWidth, window.innerHeight);
@@ -77,3 +58,5 @@
     window.addEventListener('resize', onResize);
 </script>
 
+
+<Robot scene={scene} robotName="T12"/>
