@@ -59,15 +59,15 @@
     onResize();
     window.addEventListener('resize', onResize);
 
-    function getRobot(robotName: string): Promise<URDFRobot> {
+    async function getRobot(robotName: string): Promise<URDFRobot> {
         const manager = new LoadingManager();
-        const loader = new URDFLoader( manager );
+        const loader = new URDFLoader(manager);
         const getRobotUrdfURL = `http://localhost:8080/urdfs/${robotName}.urdf`;
-        loader.workingPath = LoaderUtils.extractUrlBase( getRobotUrdfURL );
+        loader.workingPath = LoaderUtils.extractUrlBase(getRobotUrdfURL);
 
-        return fetch(getRobotUrdfURL)
-            .then(res => res.text())
-            .then(content => loader.parse(content));
+        let res = await fetch(getRobotUrdfURL);
+        let content: string = await res.text();
+        return loader.parse(content);
     }
 
     const robotPromise = getRobot("T12");
@@ -77,7 +77,6 @@
     <RadianButton />
     <div id="do-animate" class="toggle checked">Animate Joints</div>
 </div>
-<!--<RobotVisual scene={scene} robotName="T12"/>-->
 {#await robotPromise}
     <p>Waiting...</p>
 {:then robot}
