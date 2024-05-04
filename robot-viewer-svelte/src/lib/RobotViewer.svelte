@@ -41,7 +41,7 @@
     const manager = new LoadingManager();
     const loader = new URDFLoader( manager );
     loader.load(
-        '/src/assets/T12/urdf/T12.urdf',
+        'http://localhost:8080/urdfs/T12.urdf',
         (robot) => {
             robot.rotation.x = -Math.PI / 2;
             robot.traverse(child => {
@@ -53,10 +53,6 @@
                 robot.joints[`AP${ i }`].setJointValue(MathUtils.degToRad(-60));
             }
             robot.updateMatrixWorld(true);
-
-            const box = new THREE.Box3()
-            const newBox = box.setFromObject(robot);
-            // robot.position.y -= newBox.min.y;
             scene.add(robot);
         }
     )
