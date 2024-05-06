@@ -3,7 +3,7 @@ html, body {
   margin: 0;
   height: 100%;
   width: 100%;
-  overflow: hidden;
+  /*overflow: hidden;*/
   background-color: black;
 }
 
@@ -12,6 +12,7 @@ body {
   animation: fade 3s ease;
   color: white;
   user-select: none;
+  display: flex;
 }
 
 /*select {*/
@@ -149,19 +150,19 @@ body {
 /*  opacity: 0.75;*/
 /*}*/
 
-/*#controls {*/
-/*  flex: 1;*/
-/*  display: flex;*/
-/*  flex-direction: column;*/
-/*  width: 100%;*/
-/*  margin: 15px 0;*/
-/*  transition: 0.5s opacity ease;*/
-/*  overflow: hidden;*/
-/*}*/
+#controls {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin: 15px 0;
+  transition: 0.5s opacity ease;
+  overflow: hidden;
+}
 
-/*#controls > * {*/
-/*  margin: 5px 0;*/
-/*}*/
+#controls > * {
+  margin: 5px 0;
+}
 
 /*#controls #toggle-controls {*/
 /*  margin-top: 0;*/
@@ -196,23 +197,23 @@ body {
 /*  opacity: 0.5;*/
 /*}*/
 
-/*!* list of joint sliders *!*/
-/*#controls ul {*/
-/*  flex: 1;*/
-/*  overflow-y: auto;*/
-/*}*/
+/* list of joint sliders */
+#controls ul {
+  flex: 1;
+  overflow-y: auto;
+}
 
-/*#controls li {*/
-/*  font-size: 16px;*/
-/*  display: flex;*/
-/*  align-items: center;*/
-/*  padding: 1px 0;*/
+#controls li {
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  padding: 1px 0;
 
-/*  width: 100%;*/
-/*  user-select: text;*/
+  width: 100%;
+  user-select: text;
 
-/*  transition: background 0.25s ease;*/
-/*}*/
+  transition: background 0.25s ease;
+}
 
 /*#controls li[robot-hovered] {*/
 /*  background: rgba(255,255,255,0.35);*/
