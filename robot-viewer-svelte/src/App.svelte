@@ -19,20 +19,16 @@
 </script>
 
 <main>
+    {#await robotPromise}
+        <p></p>
+    {:then robot}
     <div id="controls">
         <div id="joint-sliders">
-            <ul>
-            </ul>
+            <JointSliders robot={robot}/>
         </div>
     </div>
-
-    {#await robotPromise}
-        <p>Waiting...</p>
-    {:then robot}
-        <JointSliders robot={robot}/>
         <canvas>
             <RobotViewer robot={robot}/>
         </canvas>
     {/await}
-
 </main>
